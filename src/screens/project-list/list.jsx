@@ -2,8 +2,10 @@ export const List = ({ list, users }) => {
   return (
     <table>
       <thead>
-        <tr>名称</tr>
-        <tr>负责人</tr>
+        <tr>
+          <th>名称</th>
+          <th>负责人</th>
+        </tr>
       </thead>
       <tbody>
         {list.map((project) => (

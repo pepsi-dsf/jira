@@ -19,18 +19,18 @@ export const ProjectListScreen = () => {
   const [list, setList] = useState([]);
   // 当查询参数改变时,改变list的展示数据
   useEffect(() => {
-    fetch(
-      `http://localhost:3001/projects?${qs.stringify(cleanObject(param))}`
-    ).then(async (response) => {
-      if (response.ok) {
-        setList(await response.json());
+    fetch(`${apiUrl}/projects?${qs.stringify(cleanObject(param))}`).then(
+      async (response) => {
+        if (response.ok) {
+          setList(await response.json());
+        }
       }
-    });
+    );
   }, [param]);
   // 第二个参数为空数组,则只在页面渲染时触发一次
   // 用于初始化users
   useEffect(() => {
-    fetch(`http://localhost:3001/users`).then(async (response) => {
+    fetch(`${apiUrl}/users`).then(async (response) => {
       if (response.ok) {
         setUsers(await response.json());
       }
