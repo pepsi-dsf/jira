@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { List } from "./list";
 import { SearchPanel } from "./search-panel";
-import { cleanObject } from "../../utils";
+import { cleanObject, useMount, useDebounce } from "../../utils";
 import * as qs from "qs";
 /**
  *  npm start 时 从.env.development读取URL 
@@ -16,26 +16,27 @@ export const ProjectListScreen = () => {
     name: "",
     personId: ""
   });
+  const debouncedParam = useDebounce(param, 2000);
   const [list, setList] = useState([]);
   // 当查询参数改变时,改变list的展示数据
   useEffect(() => {
-    fetch(`${apiUrl}/projects?${qs.stringify(cleanObject(param))}`).then(
-      async (response) => {
-        if (response.ok) {
-          setList(await response.json());
-        }
+    fetch(
+      `${apiUrl}/projects?${qs.stringify(cleanObject(debouncedParam))}`
+    ).then(async (response) => {
+      if (response.ok) {
+        setList(await response.json());
       }
-    );
-  }, [param]);
+    });
+  }, [debouncedParam]);
   // 第二个参数为空数组,则只在页面渲染时触发一次
   // 用于初始化users
-  useEffect(() => {
+  useMount(() => {
     fetch(`${apiUrl}/users`).then(async (response) => {
       if (response.ok) {
         setUsers(await response.json());
       }
     });
-  }, []);
+  });
   return (
     <div>
       <SearchPanel
