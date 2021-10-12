@@ -23,7 +23,8 @@ export const useMount = (callback: () => void) => {
   }, []);
 };
 //防抖函数，避免在input框中每次输入都引起param的变换而导致网络请求被频繁发送
-export const useDebounce = (value: unknown, delay?: number): any => {
+// 使用泛型来绑定函数参数与返回值的类型 使之保持一致
+export const useDebounce = <V>(value: V, delay?: number) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
