@@ -34,3 +34,17 @@ export const useDebounce = <V>(value: V, delay?: number) => {
   }, [value, delay]);
   return debouncedValue;
 };
+export const useArray = <V>(param: V[]) => {
+  const [value, setValue] = useState(param);
+  return {
+    value,
+    setValue,
+    add: (item: V) => setValue([...value, item]),
+    clear: () => setValue([]),
+    removeIndex: (index: number) => {
+      const copu = [...value];
+      copu.slice(index, 1);
+      setValue(copu);
+    },
+  };
+};
