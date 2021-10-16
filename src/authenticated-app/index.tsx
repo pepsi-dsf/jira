@@ -1,5 +1,5 @@
-import { useAuth } from "context/auth-context";
-import { ProjectListScreen } from "./screens/project-list";
+import { useAuth } from "../context/auth-context";
+import { ProjectListScreen } from "../screens/project-list";
 export const AuthenticatedApp = () => {
   const { logout } = useAuth();
 
