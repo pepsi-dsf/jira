@@ -1,7 +1,7 @@
-import { Table } from "antd";
+import { Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import { User } from "./search-panel";
-interface Project {
+export interface Project {
   id: string;
   name: string;
   personId: string;
@@ -10,12 +10,18 @@ interface Project {
   created: number;
 }
 
-interface ListProps {
-  list: Project[];
+// interface ListProps {
+//   list: Project[];
+//   users: User[];
+// }
+// 以下这种修改方式可以一劳永逸的解决往list组件中传参数的问题。不这样的话每次增加都要手动的修改interface等内容
+interface ListProps extends TableProps<Project> {
   users: User[];
 }
 
-export const List = ({ list, users }: ListProps) => {
+// export const List = ({ list, users }: ListProps) => {
+// typeof PropsType = Omit<ListProps,'users'>
+export const List = ({ users, ...props }: ListProps) => {
   return (
     <Table
       pagination={false}
@@ -53,7 +59,8 @@ export const List = ({ list, users }: ListProps) => {
           },
         },
       ]}
-      dataSource={list}
+      // dataSource={list}
+      {...props}
     />
   );
   // return (

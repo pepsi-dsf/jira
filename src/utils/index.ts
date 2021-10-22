@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
-
+export const isVoid = (value: unknown) =>
+  value === undefined || value === null || value === "";
 // 在一个函数里，改变传入的对象本身是不好的
-export const cleanObject = (object: object) => {
+// export const cleanObject = (object: object) => { object表示的范围包括函数 正则等等  如果解构一个函数 那么是无意义的  所以ts会返回一个空{}
+// 下面这种写法可以很明确的表示需要的就是一个键值对的对象
+export const cleanObject = (object: { [key: string]: unknown }) => {
   // Object.assign({}, object)
   const result = { ...object };
   Object.keys(result).forEach((key) => {
-    //@ts-ignore
     const value = result[key];
-    if (isFalsy(value)) {
-      //@ts-ignore
+    if (isVoid(value)) {
       delete result[key];
     }
   });
@@ -20,6 +21,7 @@ export const cleanObject = (object: object) => {
 export const useMount = (callback: () => void) => {
   useEffect(() => {
     callback();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
 //防抖函数，避免在input框中每次输入都引起param的变换而导致网络请求被频繁发送

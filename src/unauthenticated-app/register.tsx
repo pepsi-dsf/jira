@@ -1,9 +1,9 @@
-import { Button, Form, Input } from "antd";
+import { Form, Input } from "antd";
 import { LongButton } from "unauthenticated-app";
 import { useAuth } from "../context/auth-context";
 // const apiUrl = process.env.REACT_APP_API_URL
 export const RegisterScreen = () => {
-  const { register, user } = useAuth();
+  const { register } = useAuth();
 
   // const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
   //   event.preventDefault();
