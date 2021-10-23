@@ -11,8 +11,16 @@ const defaultInitialState: State<null> = {
   data: null,
   error: null,
 };
+// 不想每次都抛出异常来进行trycatch，所以抛出异常是可选的
+const defaultConfig = {
+  throwOnError: false,
+};
 
-export const useAsync = <D>(initialState?: State<D>) => {
+export const useAsync = <D>(
+  initialState?: State<D>,
+  initalConfig?: typeof defaultConfig
+) => {
+  const config = { ...defaultConfig, initalConfig };
   const [state, setState] = useState<State<D>>({
     ...defaultInitialState,
     ...initialState, //用户传入的state优先级比默认的高，放后面，覆盖前面的
@@ -43,7 +51,10 @@ export const useAsync = <D>(initialState?: State<D>) => {
       })
       .catch((error) => {
         setError(error);
-        return error;
+        // return error;
+        // catch会消化异常，如果不主动抛出，外面就接收不到异常
+        if (config.throwOnError) return Promise.reject(error);
+        else return error;
       });
   };
   return {

@@ -18,6 +18,10 @@ export const ProjectListScreen = () => {
     personId: "",
   });
   const debouncedParam = useDebounce(param, 2000);
+  /**
+   * 用useProjects和useUsers来封装了获取信息的操作
+   * 在这两个hook的内部又用useAsync封装了异步操作来保持登陆状态的操作
+   */
   const { isLoading, error, data: list } = useProjects(debouncedParam);
   const { data: users } = useUsers();
   return (
