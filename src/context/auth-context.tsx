@@ -1,6 +1,8 @@
-import React, { ReactNode, useState } from "react";
+import { FullPageErrorFallback, FullPageLoading } from "components/lib";
+import React, { ReactNode } from "react";
 import { useMount } from "utils";
 import { http } from "utils/http";
+import { useAsync } from "utils/use-async";
 import * as auth from "../auth-provider";
 import { User } from "../screens/project-list/search-panel";
 
@@ -33,8 +35,16 @@ AuthContext.displayName = "AuthContext";
 
 // 这里
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-
+  // const [user, setUser] = useState<User | null>(null);
+  const {
+    data: user,
+    error,
+    isLoading,
+    isIdle,
+    isError,
+    run,
+    setData: setUser,
+  } = useAsync<User | null>();
   // 这里的(user)=>setUser(user) 两个参数一样  可以消参
   // 是函数式编程的 point free 思想
   const login = (form: AuthForm) => auth.login(form).then(setUser);
@@ -44,9 +54,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // 页面加载时初始化user  防止每次刷新都会回到登录页面
   useMount(() => {
-    bootstrapUser().then(setUser);
+    // bootstrapUser().then(setUser); 用useAsync封装
+    run(bootstrapUser());
   });
-
+  if (isIdle || isLoading) {
+    return <FullPageLoading />;
+  }
+  if (isError) {
+    return <FullPageErrorFallback error={error}></FullPageErrorFallback>;
+  }
   return (
     <AuthContext.Provider
       children={children}
