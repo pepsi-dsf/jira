@@ -50,3 +50,25 @@ export const useArray = <V>(param: V[]) => {
     },
   };
 };
+
+// 用来自定义网页title
+export const useDocumentTitle = (
+  title: string,
+  keepOnUnmount: boolean = true
+) => {
+  const oldTitle = document.title;
+
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+
+  useEffect(() => {
+    // useEffect return的函数将在组件被卸载的时候调用
+    return () => {
+      if (!keepOnUnmount) {
+        document.title = oldTitle;
+      }
+    };
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+};
