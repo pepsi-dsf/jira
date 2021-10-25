@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 export const isVoid = (value: unknown) =>
@@ -56,7 +56,8 @@ export const useDocumentTitle = (
   title: string,
   keepOnUnmount: boolean = true
 ) => {
-  const oldTitle = document.title;
+  // useRef在整个生命周期中保持不变，不需要用闭包的特性
+  const oldTitle = useRef(document.title).current;
 
   useEffect(() => {
     document.title = title;
@@ -66,9 +67,9 @@ export const useDocumentTitle = (
     // useEffect return的函数将在组件被卸载的时候调用
     return () => {
       if (!keepOnUnmount) {
+        // 之前这里用的是闭包的特性，依赖项传的是空数组
         document.title = oldTitle;
       }
     };
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [keepOnUnmount, oldTitle]);
 };

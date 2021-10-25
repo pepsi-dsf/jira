@@ -7,7 +7,6 @@ import logo from "../assets/logo.svg";
 import left from "../assets/left.svg";
 import right from "../assets/right.svg";
 import { useDocumentTitle } from "utils";
-
 export const UnauthenticateApp = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -15,6 +14,7 @@ export const UnauthenticateApp = () => {
   useDocumentTitle("请登录注册以继续", false);
   return (
     // <div style={{ display: 'flex', justifyContent: 'center' }}>  用CSS in JS 来替换style的写法
+
     <Container>
       <Header />
       <Background />
